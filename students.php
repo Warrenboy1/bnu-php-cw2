@@ -18,20 +18,25 @@ if (isset($_SESSION['id'])) {
       $result = mysqli_query($conn,$sql);
 
      // prepare page content
+     $data['content'] .= "<form method='post' action='delete.php'>";
+
      $data['content'] .= "<table border='1'>";
-     $data['content'] .= "<tr><th colspan='9' align='center'>Students</th></tr>";
-     $data['content'] .= "<tr><th>studentID</th><th>DoB</th><th>FirstName</th>
+     $data['content'] .= "<tr><th colspan='10' align='center'>Students</th></tr>";
+     $data['content'] .= "<tr><th></th><th>studentID</th><th>DoB</th><th>FirstName</th>
                             <th>LastName</th><th>house</th><th>Town</th><th>County</th>
                             <th>Country</th><th>PostCode</th></tr>";
      // Display the students within the html table
      while($row = mysqli_fetch_array($result)) {
-        $data['content'] .= "<tr><td> $row[studentid] </td><td> $row[dob] </td>";
+        $data['content'] .= "<tr><td> <input type='checkbox' name='checkbox[]' value='".$row['studentid']."'> </td><td> $row[studentid] </td><td> $row[dob] </td>";
         $data['content'] .= "<td> $row[firstname] </td><td> $row[lastname] </td>";
         $data['content'] .= "<td> $row[house] </td><td> $row[town] </td>";
         $data['content'] .= "<td> $row[county] </td><td> $row[country] </td><td> $row[postcode] </td></tr>";
-
      }
-     $data['content'] .= "</table>";
+     
+
+        $data['content'] .= "</table>";
+        $data['content'] .= "<input type='submit' name='delete' id='delete' value='Delete Students' >";
+        $data['content'] .= "</form>";
 
      // render the template
      echo template("templates/default.php", $data);

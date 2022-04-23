@@ -40,7 +40,7 @@ if (isset($_SESSION['id'])) {
 
         <h2>My Details</h2>
         <form name="frmdetails" action="" method="post">
-        <input type="submit" value="Save" name="submit"/>
+        <input type="submit" value="Update details with 5 students?" name="submit"/>
         </form>
 
         EOD;
