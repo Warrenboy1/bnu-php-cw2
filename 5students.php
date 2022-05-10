@@ -8,13 +8,13 @@ include("_includes/functions.inc");
 // check logged in
 if (isset($_SESSION['id'])) {
 
-   echo template("templates/partials/header.php");
-   echo template("templates/partials/nav.php");
+    echo template("templates/partials/header.php");
+    echo template("templates/partials/nav.php");
 
-   // if the form has been submitted
-   if (isset($_POST['submit'])) {
+    // if the form has been submitted
+    if (isset($_POST['submit'])) {
 
-      // build an sql statment to update the student details
+      // build an sql statment to insert 5 student details automatically
       $sql = "INSERT INTO student (firstname, lastname, house, town,
                  county, country, postcode, studentid) VALUES 
             ('Warren', 'Frank', '34 KFC road', 'High Wycombe',
@@ -27,15 +27,17 @@ if (isset($_SESSION['id'])) {
              'South London', 'UK', 'SE42 8HG', '20000004'),
             ('Noc', 'Turne', '83 Me Road', 'Edmonton',
              'East London', 'UK', 'E45 4GH', '20000005')";
-      if(mysqli_query($conn,$sql)){
-          echo "Records inserted.";
-      }else{
-          echo "ERROR.";
-      }
+        // run query into sql
+        if(mysqli_query($conn,$sql)){
+            echo "Records inserted.";
+        }else{
+            echo "ERROR.";
+        }
 
-      $data['content'] = "<p>Your details have been updated</p>";
+    $data['content'] = "<p>Your details have been updated</p>";
     }
     else{
+        // using <<<EOD notation to allow building of a multi-line string
         $data['content'] = <<<EOD
 
         <h2>My Details</h2>
@@ -48,12 +50,8 @@ if (isset($_SESSION['id'])) {
 
    
 
-   // render the template
-   echo template("templates/default.php", $data);
-
-
-echo template("templates/partials/footer.php");
+    // render the template
+    echo template("templates/default.php", $data);
+    echo template("templates/partials/footer.php");
 }
-//$sql = "INSERT INTO student (firstname, lastname, house,
-       //town, county, country, postcode, studentid) VALUES ('Warren', 'Frank', '', '', '', '', '', '')";
 ?>
