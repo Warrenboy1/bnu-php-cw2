@@ -23,6 +23,8 @@ if (isset($_SESSION['id'])) {
       $sql .= "country ='" . $_POST['txtcountry']  . "',";
       $sql .= "postcode ='" . $_POST['txtpostcode']  . "' ";
       $sql .= "where studentid = '" . $_SESSION['id'] . "';";
+
+      
       $result = mysqli_query($conn,$sql);
 
       $data['content'] = "<p>Your details have been updated</p>";
