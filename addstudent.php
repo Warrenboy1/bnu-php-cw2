@@ -24,23 +24,40 @@ echo template("templates/partials/nav.php");
         $country = $_POST['txtcountry'];
         $postcode = $_POST['txtpostcode'];
         $studentid = $_POST['txtstudentid'];
+        $image = $_FILES['profilepicture']['tmp_name']; 
+        $imagedata = addslashes(fread(fopen($image, "r"), filesize($image)));
 
-        // prepare an sql statment to insert the student details
+
+        $sql = "INSERT INTO student (firstname, lastname, house, town,
+                 county, country, postcode, studentid, image) VALUES 
+            ('$firstname', '$lastname', '$house', '$town', '$county', '$country', '$postcode', '$studentid', '$imagedata')";
+        /* // prepare an sql statment to insert the student details
         $stmt = $conn->prepare("INSERT INTO student (firstname, lastname, house, town,
-        county, country, postcode, studentid) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        county, country, postcode, studentid, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
       
         // This function binds the parameters to the SQL query and tells the database what the parameters are.
         // The s character tells mysql that the parameter is a string. i for integar.
-        $stmt->bind_param("sssssssi", $firstname, $lastname, $house, $town, $county, $country, $postcode, $studentid);
+        $stmt->bind_param("sssssssib", $firstname, $lastname, $house, $town, $county, $country, $postcode, $studentid, $image);
 
         // Execute the statement
-        $stmt->execute();
+        $stmt->execute(); */
+        $result = mysqli_query($conn, $sql);
         $data['content'] = "<p>Your details have been updated</p>";
     }
-        // if the profile picture form has been submitted
+         // if the profile picture form has been submitted
     else if (isset($_POST['change'])) {
 
-                                                    echo;
+        $image = $_FILES['profilepicture']['tmp_name']; 
+        $imagedata = addslashes(fread(fopen($image, "r"), filesize($image)));
+
+        $stmt = $conn->prepare("UPDATE student SET image=? WHERE studentid=?");
+        $stmt->bind_param(1,$image);
+        $stmt->bind_param(2,$_POST['txtstudentid']);
+        $stmt->execute();
+ 
+
+
+        
     }
     else {
 
@@ -50,7 +67,7 @@ echo template("templates/partials/nav.php");
       $data['content'] = <<<EOD
 
         <h2>My Details</h2>
-        <form action="" method="post">
+        <form enctype="multipart/form-data" action="" method="post">
         First Name :
         <input name="txtfirstname" type="text" /><br/>
         Surname :
@@ -67,13 +84,15 @@ echo template("templates/partials/nav.php");
         <input name="txtpostcode" type="text" /><br/>
         StudentID :
         <input name="txtstudentid" type="number" /><br/>
+        Profile Picture :
+        <input name="profilepicture" type="file" accept="image/jpeg" /><br/>
         <input type="submit" value="Save" name="submit"/>
         </form>
 
         <h2>Add Profile Picture to Student?</h2>
-        <form action="" method="post">
+        <form enctype="multipart/form-data" action="" method="post">
         Profile Picture :
-        <input name="profilePicture" type="file" /><br/>
+        <input name="profilepicture" type="file" accept="image/jpeg" /><br/>
         Input student id to match to database :
         <input name="txtstudentid" type="number" /><br/>
         <input type="submit" value="Change!" name="change"/>
@@ -87,4 +106,7 @@ echo template("templates/partials/nav.php");
     echo template("templates/default.php", $data);
     echo template("templates/partials/footer.php");
 }
+
+
+
 ?>
